@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Live Chat</title>
+    <style>
+      color: white;
+      background-color: black;
+      padding: 2px;
+    </style>
+  </head>
+  <body>
+    <h1>Live Chat</h1>
+    <form class="" action="/" method="post" id="chat-form">
+      <input type="text" name="message" id="message" placeholder="Your message..." size="50" autofocus />
+      <input type="submit" id="send_message" value="Send" />
+    </form>
+
+    <section id="chat_zone">
+
+    </section>
+
+
+    <script scr="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script scr="/socket.io/socket.io.js"></script>
+    <script>
+      //socket connection
+      var socket = io.connect('http://localhost:8080');
+
+      //Username request and send it to the server, then display it
+      var username = prompt('What username do you want to use? ');
+      socket.emit.('new_user', username);
+      document.title = username + ' ' + document.title;
+
+      //Insert message to the page when there is a new one
+      socket.on('message', function(data){
+        insertMessage(data.username, data.message);
+      })
+
+      //Insert message to the page when there is a new one
+      socket.on('new_user', function(username){
+        $('#chat_zone').prepend('<p><em>'+ username +' joined the discussion!</em></p>');
+      })
+
+      // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
+      $('#form_chat').submit(function () {
+        var message = $('#message').val();
+        socket.emit('message', message); // Send message to other
+        insereMessage(username, message); // Show the message on our page too
+        $('#message').val('').focus(); // Empty zone chat
+        return false; // Block the classic form return (page reload)
+      });
+
+      // Add message to the page
+      function insereMessage(username, message) {
+        $('#zone_chat').prepend('<p><strong>' + username + '</strong> ' + message + '</p>');
+      }
+
+    </script>
+  </body>
+</html>
