@@ -4,7 +4,7 @@
   "dependencies": {
     "ent": "^0.1.0",
     "express": "^3.3.8",
-    "socket.io": "^1.2.1"
+    "socket.io": "^2.4.0"
   },
   "author": "@fbsall",
   "description": "super chat, cours de Mathieu Nebra on Openclassroom"
